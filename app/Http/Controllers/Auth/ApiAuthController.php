@@ -94,4 +94,8 @@ class ApiAuthController extends Controller
 
         return $user;
     }
+
+    public function loginHealthCheck() {
+        return response()->caps('login checked', Response::HTTP_OK);
+    }
 }

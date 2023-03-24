@@ -28,6 +28,7 @@ Route::prefix('user')->group(function() {
 // 로그인 하고 사용 할 수 있는 API
 Route::middleware('auth:api')->group(function() {
     // 관리자만 사용 할 수 있는 API
+    Route::post('health', [ApiAuthController::class, 'loginHealthCheck']);
     Route::post('authTest', [CCTVController::class, 'getAuthToken']);
     Route::post('account', [CCTVController::class, 'accountInfo']);
     Route::post('camera', [CCTVController::class, 'camera']);
