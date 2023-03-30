@@ -15,10 +15,11 @@ class CCTVController extends Controller
     public function camera(Request $request) {
         $uri = "https://int.tbapi.kt.com/gigaeyes/v1.0/camera";
         $authToken = $request->user()['giga_auth_token'];
+        $authToken = "ZGF0YT1kNjRjMTQ5ZDkwMDgyN2RkOWJjMjZjMzQyYTk3OWVlMmNhMDZjMDQzYzk1N2U5NzMyNTg2OTliODc5YmRiZDMzOTVlYzg1MmE5OTk2NzNlNGIyNzI4ZDRhNTAyOGNlODI2M2IyYTgxOWFlYzNmNDUyZTEzODFkZDRlNDNjNDdiZWVmMGViZTZjZjc4MzU1N2U0YTEyNDIyMGQyNmMwNjZmMmVhMTM5ODZlZDY5MDY4OTQxNmI0NzVlYTY0OWExODJlMGZkYmM2N2JhYjBiNjA5ZWFmOWRlNWFmNWE1YjRiMTczODAxZTJiYWU3YmQ5N2ViNzA0OWViM2Q0MTdjNGZjMjEwZGIwODAzZDE3MmNhZDVjMDBhNWMzNjA0ZjE0ZWQ3MDdiODY0OWVjOTdiYTU5MGM1OWRjZjJlZmQ3YTgwM2RmOTcwNWEyMDJjN2ExNTM1NDNlNzY3N2JiNzI3NDcwMjU5NTAzOTBkYmVmOTVjMzFmZWEwZTU2NjBhOWQwZGImbG9naW5LZXk9MzFiNTA2YTItYmZiZS00ZTk0LTk0YTMtMGM1ZWRkMWQ5YzBj";
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/0.0.0.1)',
+            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/222.148.246.64)',
             'authToken:'.$authToken
         ];
         $body = [
@@ -37,19 +38,20 @@ class CCTVController extends Controller
     // 레코드 비디오 목록 (테스트 대기 중)
     public function recodeVideo(Request $request) {
         $uri = "https://int.tbapi.kt.com/gigaeyes/v1.0/recordVideo";
-        $authToken = $request->user()['giga_auth_token'];
+        // $authToken = $request->user()['giga_auth_token'];
+        $authToken = "ZGF0YT1kNjRjMTQ5ZDkwMDgyN2RkOWJjMjZjMzQyYTk3OWVlMmNhMDZjMDQzYzk1N2U5NzMyNTg2OTliODc5YmRiZDMzOTVlYzg1MmE5OTk2NzNlNGIyNzI4ZDRhNTAyOGNlODI2M2IyYTgxOWFlYzNmNDUyZTEzODFkZDRlNDNjNDdiZWVmMGViZTZjZjc4MzU1N2U0YTEyNDIyMGQyNmMwNjZmMmVhMTM5ODZlZDY5MDY4OTQxNmI0NzVlYTY0OWExODJlMGZkYmM2N2JhYjBiNjA5ZWFmOWRlNWFmNWE1YjRiMTczODAxZTJiYWU3YmQ5N2ViNzA0OWViM2Q0MTdjNGZjMjEwZGIwODAzZDE3MmNhZDVjMDBhNWMzNjA0ZjE0ZWQ3MDdiODY0OWVjOTdiYTU5MGM1OWRjZjJlZmQ3YTgwM2RmOTcwNWEyMDJjN2ExNTM1NDNlNzY3N2JiNzI3NDcwMjU5NTAzOTBkYmVmOTVjMzFmZWEwZTU2NjBhOWQwZGImbG9naW5LZXk9MzFiNTA2YTItYmZiZS00ZTk0LTk0YTMtMGM1ZWRkMWQ5YzBj";
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/0.0.0.1)',
+            'User-Agent:GiGA Eyes(compatible;DeviceType/PC;DeviceMode/PC;DeviceId/469F03EC8E35E3371CADF016F93BE670;OSType/PC;OSVersion/1.0;AppVersion/3.4.12;IpAddr/222.148.246.64)',
             'authToken:'.$authToken
         ];
 
         $body = [
             'request'=>[
                 'cam_id'=>'D00008436821019',
-                'start_time'=>'20230307101000',
-                'end_time'=>'20230307101020'
+                'start_time'=>'20230327101000',
+                'end_time'=>'20230327101020'
             ]
         ];
 
@@ -66,18 +68,19 @@ class CCTVController extends Controller
     public function recordVideoList(Request $request) {
         $uri = "https://int.tbapi.kt.com/gigaeyes/v1.0/recordVideoList";
         $authToken = $request->user()['giga_auth_token'];
+        $authToken = "ZGF0YT1kNjRjMTQ5ZDkwMDgyN2RkOWJjMjZjMzQyYTk3OWVlMmNhMDZjMDQzYzk1N2U5NzMyNTg2OTliODc5YmRiZDMzOTVlYzg1MmE5OTk2NzNlNGIyNzI4ZDRhNTAyOGNlODI2M2IyYTgxOWFlYzNmNDUyZTEzODFkZDRlNDNjNDdiZWVmMGViZTZjZjc4MzU1N2U0YTEyNDIyMGQyNmMwNjZmMmVhMTM5ODZlZDY5MDY4OTQxNmI0NzVlYTY0OWExODJlMGZkYmM2N2JhYjBiNjA5ZWFmOWRlNWFmNWE1YjRiMTczODAxZTJiYWU3YmQ5N2ViNzA0OWViM2Q0MTdjNGZjMjEwZGIwODAzZDE3MmNhZDVjMDBhNWMzNjA0ZjE0ZWQ3MDdiODY0OWVjOTdiYTU5MGM1OWRjZjJlZmQ3YTgwM2RmOTcwNWEyMDJjN2ExNTM1NDNlNzY3N2JiNzI3NDcwMjU5NTAzOTBkYmVmOTVjMzFmZWEwZTU2NjBhOWQwZGImbG9naW5LZXk9MzFiNTA2YTItYmZiZS00ZTk0LTk0YTMtMGM1ZWRkMWQ5YzBj";
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/0.0.0.1)',
+            'User-Agent:GiGA Eyes(compatible;DeviceType/PC;DeviceMode/PC;DeviceId/469F03EC8E35E3371CADF016F93BE670;OSType/PC;OSVersion/1.0;AppVersion/3.4.12;IpAddr/222.148.246.64)',
             'authToken:'.$authToken
         ];
 
         $body = [
             'request'=>[
                 'cam_ids'=>['D00008436821019'],
-                'start_time'=>'20230307101000',
-                'end_time'=>'20230307101020'
+                'start_time'=>'20230327101000',
+                'end_time'=>'20230327101020'
             ]
         ];
 
@@ -98,7 +101,7 @@ class CCTVController extends Controller
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/0.0.0.1)',
+            'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/222.148.246.64)',
             'authToken:'.$authToken
         ];
         $body = [

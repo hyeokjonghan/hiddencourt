@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\CCTV\CCTVController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,14 @@ Route::middleware('auth:api')->group(function() {
     Route::post('camera', [CCTVController::class, 'camera']);
     Route::post('recodeVideo', [CCTVController::class, 'recodeVideo']);
     Route::post('recordVideoList', [CCTVController::class, 'recordVideoList']);
+
+    
+
+    Route::prefix('reservation')->group(function() {
+        Route::get('/list', [ReservationController::class, 'reservationList']);
+        Route::post('/append', [ReservationController::class, 'appendReservation']);
+        Route::put('/modify/{reservation}', [ReservationController::class, 'modifyReservation']);
+        Route::put('/state/{reservation}', [ReservationController::class, 'modifyReservationState']);
+        Route::delete('/delete/{reservation}', [ReservationController::class, 'deleteReservation']);
+    });
 });
