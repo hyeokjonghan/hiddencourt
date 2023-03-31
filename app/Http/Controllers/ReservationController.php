@@ -21,7 +21,7 @@ class ReservationController extends Controller
         }
 
         if($request->reservation_name) {
-            $query->where('reservation_name', $request->reservation_name);
+            $query->where('reservation_name', 'like', '%'.$request->reservation_name.'%');
         }
 
         if($request->has('state')) {
@@ -55,10 +55,10 @@ class ReservationController extends Controller
         $checkReservation = Reservation::where('reservation_date', $request->reservation_date)
         ->where(function($query) use ($request) {
             $query->where(function ($q) use ($request) {
-                $q->whereTime('reservation_end_time','>=',$request->reservation_start_time)
+                $q->whereTime('reservation_end_time','>',$request->reservation_start_time)
                 ->whereTime('reservation_start_time','<=',$request->reservation_start_time);
             })->orWhere(function ($q) use ($request) {
-                $q->whereTime('reservation_start_time','<=',$request->reservation_end_time)
+                $q->whereTime('reservation_start_time','<',$request->reservation_end_time)
                 ->whereTime('reservation_end_time','>=',$request->reservation_end_time);
             });
         })->get();
@@ -143,10 +143,10 @@ class ReservationController extends Controller
             ->where('reservation_no','<>', $reservation->reservation_no)
             ->where(function($query) use ($modifyData) {
                 $query->where(function ($q) use ($modifyData) {
-                    $q->whereTime('reservation_end_time','>=',$modifyData['reservation_start_time'])
+                    $q->whereTime('reservation_end_time','>',$modifyData['reservation_start_time'])
                     ->whereTime('reservation_start_time','<=',$modifyData['reservation_start_time']);
                 })->orWhere(function ($q) use ($modifyData) {
-                    $q->whereTime('reservation_start_time','<=',$modifyData['reservation_end_time'])
+                    $q->whereTime('reservation_start_time','<',$modifyData['reservation_end_time'])
                     ->whereTime('reservation_end_time','>=',$modifyData['reservation_end_time']);
                 });
             })->get();
