@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Ms\OneDriveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::middleware(['web'])->group(function() {
+    Route::prefix('ms')->group(function() {
+        Route::get('login',[OneDriveController::class, 'getOauth']);
+        Route::get('redirect',[OneDriveController::class,'redirect']);
+    });
+    
+});
+
+
 
 Route::get('/', function () {
     return view('welcome');
