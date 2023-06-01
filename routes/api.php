@@ -25,17 +25,20 @@ Route::prefix('upload')->group(function() {
     Route::post('/{uploadDivision}',[UploadController::class,'fileUpload']);
 });
 
+
+
 // Route::prefix('user')->group(function() {
 //     Route::post('/login', [ApiAuthController::class, 'createToken']);
 //     Route::post('/token/refersh', [ApiAuthController::class, 'tokenRefresh']);
 //     Route::post('/register', [ApiAuthController::class, 'createUser']);
 // });
 
-// 테스트용
-// Route::prefix('cctv')->group(function() {
-//     Route::get('/camera', [CameraController::class, 'insertCameraInit']);
-//     Route::get('/connect/test', [ClipController::class, 'setClipToday']);
-// });
+
+Route::prefix('cctv')->group(function() {
+    // Route::get('/camera', [CameraController::class, 'insertCameraInit']);
+    // Route::get('/connect/test', [ClipController::class, 'setClipToday']);
+    Route::post('/cart/sync',[ClipController::class, 'clipSync']);
+});
 
 // 로그인 하고 사용 할 수 있는 API
 // Route::middleware('auth:api')->group(function() {

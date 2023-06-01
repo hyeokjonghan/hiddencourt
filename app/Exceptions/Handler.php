@@ -3,6 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\InvalidOrderException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -41,8 +45,20 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // $this->reportable(function (Throwable $e) {
+
+        // });
+
+        $this->renderable(function (Throwable $e, Request $request) {
+            // DEBUG 모드가 아닐 때만
+            if (!env('APP_DEBUG')) {
+                $responseError = json_encode([
+                    'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => 'SERVER ERROR'
+                ], true);
+                print_r($responseError);
+                return response()->view('error',[],Response::HTTP_INTERNAL_SERVER_ERROR)->header('Content-Type', 'application/json');
+            }
         });
     }
 }
