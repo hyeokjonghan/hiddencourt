@@ -25,32 +25,27 @@ Route::prefix('upload')->group(function() {
     Route::post('/{uploadDivision}',[UploadController::class,'fileUpload']);
 });
 
-Route::prefix('user')->group(function() {
-
-    // 일반 로그인.. SNS 관련 처리 할 때 추가 편집 해줘야 함
-    Route::post('/login', [ApiAuthController::class, 'createToken']);
-    Route::post('/token/refersh', [ApiAuthController::class, 'tokenRefresh']);
-
-    // 일반 회원가입
-    Route::post('/register', [ApiAuthController::class, 'createUser']);
-});
+// Route::prefix('user')->group(function() {
+//     Route::post('/login', [ApiAuthController::class, 'createToken']);
+//     Route::post('/token/refersh', [ApiAuthController::class, 'tokenRefresh']);
+//     Route::post('/register', [ApiAuthController::class, 'createUser']);
+// });
 
 // 테스트용
-Route::prefix('cctv')->group(function() {
-    Route::get('/camera', [CameraController::class, 'insertCameraInit']);
-    Route::get('/connect/test', [ClipController::class, 'setClipToday']);
-});
+// Route::prefix('cctv')->group(function() {
+//     Route::get('/camera', [CameraController::class, 'insertCameraInit']);
+//     Route::get('/connect/test', [ClipController::class, 'setClipToday']);
+// });
 
 // 로그인 하고 사용 할 수 있는 API
-Route::middleware('auth:api')->group(function() {
-    // 관리자만 사용 할 수 있는 API
-    // Route::post('authTest', [CCTVController::class, 'generateAuthTicket']);
-    // Route::post('health', [ApiAuthController::class, 'loginHealthCheck']);
-    // Route::post('authTest', [CCTVController::class, 'getAuthToken']);
-    // Route::post('account', [CCTVController::class, 'accountInfo']);
-    // Route::post('camera', [CCTVController::class, 'camera']);
-    // Route::post('recordVideo', [CCTVController::class, 'recordVideo']);
-    // Route::post('recordVideoList', [CCTVController::class, 'recordVideoList']);
+// Route::middleware('auth:api')->group(function() {
+//     Route::post('authTest', [CCTVController::class, 'generateAuthTicket']);
+//     Route::post('health', [ApiAuthController::class, 'loginHealthCheck']);
+//     Route::post('authTest', [CCTVController::class, 'getAuthToken']);
+//     Route::post('account', [CCTVController::class, 'accountInfo']);
+//     Route::post('camera', [CCTVController::class, 'camera']);
+//     Route::post('recordVideo', [CCTVController::class, 'recordVideo']);
+//     Route::post('recordVideoList', [CCTVController::class, 'recordVideoList']);
 
-    // Route::post('/test/camera', [CameraController::class, 'insertCameraInit']);
-});
+//     Route::post('/test/camera', [CameraController::class, 'insertCameraInit']);
+// });
