@@ -56,7 +56,7 @@ class ktApiController extends Controller
             $header = [
                 'Content-Type:application/json;charset=UTF-8',
                 'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-                'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/222.148.246.64)',
+                'User-Agent:GiGAeyes (compatible;DeviceType/iPhone;DeviceModel/SCH-M20;DeviceId/3F2A009CDE;OSType/iOS;OSVersion/5.1.1;AppVersion/3.0.0;IpAddr/'.env('SERVER_IP').')',
                 'authToken:'.$authToken
             ];
             $body = [
@@ -81,7 +81,7 @@ class ktApiController extends Controller
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS')),
-            'User-Agent:GiGA Eyes(compatible;DeviceType/PC;DeviceMode/PC;DeviceId/469F03EC8E35E3371CADF016F93BE670;OSType/PC;OSVersion/1.0;AppVersion/3.4.12;IpAddr/222.148.246.64)',
+            'User-Agent:GiGA Eyes(compatible;DeviceType/PC;DeviceMode/PC;DeviceId/469F03EC8E35E3371CADF016F93BE670;OSType/PC;OSVersion/1.0;AppVersion/3.4.12;IpAddr/' . env('SERVER_IP') . ')',
             'authToken:'.$authToken
         ];
 
@@ -96,7 +96,7 @@ class ktApiController extends Controller
         //yyyymmddhhmmss
 
         $body = json_encode($body, true);
-
+        
         $curlController = new CURLController();
         $returnData = $curlController->postCURL($uri, $body, $header);
         $returnData = json_decode($returnData['data'], true);

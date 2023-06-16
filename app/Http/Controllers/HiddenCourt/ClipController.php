@@ -4,6 +4,7 @@ namespace App\Http\Controllers\HiddenCourt;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ktApiController;
+use App\Http\Controllers\UploadController;
 use App\Models\Camera;
 use App\Models\HiddenCourt\DevCart;
 use App\Models\HiddenCourt\DevClip;
@@ -11,6 +12,7 @@ use Error;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ClipController extends Controller
 {
@@ -21,6 +23,7 @@ class ClipController extends Controller
 
     public function setClipToday()
     {
+
         $cartController = new CartController();
         $todayCartList = $cartController->getTodayReservation();
         $ktApiController = new ktApiController();
@@ -50,17 +53,30 @@ class ClipController extends Controller
     public function saveNewClip($authToken, $cartInfo, $time, $cartTime, $cameraInfo)
     {
         $ktApiController = new ktApiController();
-        $startTime = date("Ymd") . str_replace(':', '', $time) . '00';
-        $startTimeStamp = strtotime(date("Y-m-d") . " " . $time . ":00" . "+30 minutes");
+        $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $time) . '00';
+        $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
         $endTime = date("YmdHis", $startTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
-
+        
         // 영상 정보가 있을 경우
         if (isset($videoInfo['response']['stream_url'])) {
+
+            $context = array(
+                "ssl" => array(
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                ),
+            );
+            $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
+            // FilePath
+            $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
+            Storage::disk('s3')->put($filePath, $html);
+            
+
             $clip = new DevClip([
                 'cart_idx' => $cartInfo['idx'],
                 'phoneid' => $cartInfo['phoneid'],
-                'link' => $videoInfo['response']['stream_url'],
+                'link' => env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath,
                 'cart_time' => $cartTime,
                 'regdate' => date("Y-m-d H:i:s"),
                 'limitdate' => date("Y-m-d", strtotime(date("Y-m-d") . "+7 days"))
