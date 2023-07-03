@@ -5,12 +5,14 @@ namespace App\Http\Controllers\HiddenCourt;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ktApiController;
 use App\Http\Controllers\UploadController;
+use App\Jobs\ConvertMovie;
 use App\Models\Camera;
 use App\Models\HiddenCourt\DevCart;
 use App\Models\HiddenCourt\DevClip;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,6 +30,7 @@ class ClipController extends Controller
         $todayCartList = $cartController->getTodayReservation();
         $ktApiController = new ktApiController();
         $authToken = $ktApiController->getAuthToken();
+        return $authToken;
         if ($authToken) {
             foreach ($todayCartList as $todayCart) {
                 $coatName = str_replace(' ', '', $todayCart['coatname']);
@@ -68,22 +71,14 @@ class ClipController extends Controller
                 ),
             );
             $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
-            // FilePath
+
+            
             $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
             Storage::disk('s3')->put($filePath, $html);
-            
 
-            $clip = new DevClip([
-                'cart_idx' => $cartInfo['idx'],
-                'phoneid' => $cartInfo['phoneid'],
-                'link' => env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath,
-                'cart_time' => $cartTime,
-                'regdate' => date("Y-m-d H:i:s"),
-                'limitdate' => date("Y-m-d", strtotime(date("Y-m-d") . "+7 days"))
-            ]);
-            $clip->save();
+            // 해당 부분 부터 큐로 처리
+            Queue::push(new ConvertMovie($filePath, $cartInfo, $cartTime));
 
-            return $clip;
         }
     }
 
@@ -131,6 +126,7 @@ class ClipController extends Controller
                     $this->saveNewClip($authToken, $cartInfo, $cartInfo['second_time'], 2, $cameraInfo);
                 }
             }
+            
         } catch(Error $e) {
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

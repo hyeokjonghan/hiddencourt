@@ -14,16 +14,10 @@ use App\Http\Controllers\Ms\OneDriveController;
 |
 */
 
-Route::middleware(['web'])->group(function() {
-    Route::prefix('ms')->group(function() {
-        Route::get('login',[OneDriveController::class, 'getOauth']);
-        Route::get('redirect',[OneDriveController::class,'redirect']);
-    });
-    
-});
+
 
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('sample');
 });

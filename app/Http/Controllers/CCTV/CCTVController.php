@@ -57,7 +57,7 @@ class CCTVController extends Controller
         $body = [
             'request' => [
                 'cam_id' => 'F00242007441001',
-                'start_time' => '20230610101000',
+                'start_time' => '20230710101000',
                 'end_time' => '20230610101500'
             ]
         ];

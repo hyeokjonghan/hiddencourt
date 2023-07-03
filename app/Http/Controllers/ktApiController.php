@@ -33,7 +33,6 @@ class ktApiController extends Controller
         ];
 
         $body = json_encode($body,true);
-
         
         $curlController = new CURLController();
         $returnData = $curlController->postCURL($uri,$body,$header);
