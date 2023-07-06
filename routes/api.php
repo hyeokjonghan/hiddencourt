@@ -28,7 +28,7 @@ Route::prefix('upload')->group(function() {
 
 
 Route::prefix('user')->group(function() {
-    // Route::post('/login', [ApiAuthController::class, 'createToken']);
+    Route::post('/login', [ApiAuthController::class, 'createToken']);
     // Route::post('/token/refersh', [ApiAuthController::class, 'tokenRefresh']);
     Route::post('/register', [ApiAuthController::class, 'createUser']);
 });
