@@ -42,7 +42,6 @@ Route::prefix('cctv')->group(function() {
 
 // 로그인 하고 사용 할 수 있는 API
 Route::middleware('auth:api')->group(function() {
-    Route::post('authTest', [CCTVController::class, 'generateAuthTicket']);
     Route::post('health', [ApiAuthController::class, 'loginHealthCheck']);
     Route::post('authTest', [CCTVController::class, 'getAuthToken']);
     Route::post('account', [CCTVController::class, 'accountInfo']);

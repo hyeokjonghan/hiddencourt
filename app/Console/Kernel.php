@@ -18,6 +18,8 @@ class Kernel extends ConsoleKernel
             $clipController = new ClipController();
             $clipController->setClipToday();
         })->hourlyAt(10);
+
+        $schedule->command('queue:work --daemon --queue=high,default')->everyMinute()->withoutOverlapping();
     }
 
     /**
