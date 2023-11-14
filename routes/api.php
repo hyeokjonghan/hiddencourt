@@ -8,7 +8,7 @@ use App\Http\Controllers\CCTV\CCTVController;
 use App\Http\Controllers\HiddenCourt\CartController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\HiddenCourt\ClipController;
-
+use App\Http\Controllers\ktApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +25,8 @@ Route::prefix('upload')->group(function() {
     Route::post('/{uploadDivision}',[UploadController::class,'fileUpload']);
 });
 
+Route::get('/connect/test', [CartController::class, 'getTodayReservation']);
+
 
 
 Route::prefix('user')->group(function() {
@@ -36,7 +38,8 @@ Route::prefix('user')->group(function() {
 
 Route::prefix('cctv')->group(function() {
     // Route::get('/camera', [CameraController::class, 'insertCameraInit']);
-    Route::get('/connect/test', [ClipController::class, 'setClipToday']);
+    // Route::get('/connect/test', [ClipController::class, 'setClipToday']);
+    Route::get('/connect/test', [ktApiController::class, 'getAuthToken']);
     Route::post('/cart/sync',[ClipController::class, 'clipSync']);
 });
 

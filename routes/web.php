@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Ms\OneDriveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +18,6 @@ use App\Http\Controllers\Ms\OneDriveController;
 
 
 Route::get('/', function () {
-    return view('sample');
+    return null;
+    // return view('sample');
 });
