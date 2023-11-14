@@ -25,7 +25,7 @@ Route::prefix('upload')->group(function() {
     Route::post('/{uploadDivision}',[UploadController::class,'fileUpload']);
 });
 
-Route::get('/connect/test', [CartController::class, 'getTodayReservation']);
+// Route::get('/connect/test', [CartController::class, 'getTodayReservation']);
 
 
 
