@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Lib\CURLController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ktApiController extends Controller
 {
@@ -20,8 +21,8 @@ class ktApiController extends Controller
         $header = [
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS'))
-        ];
-
+	];
+	Log::info($header);
 
         $body = [
             'request'=>[
@@ -30,7 +31,8 @@ class ktApiController extends Controller
                 'offset_length'=>128,
                 'site_id'=>env('GIGA_SITEID')
             ]
-        ];
+	];
+	Log::info($body);
 
         $body = json_encode($body,true);
         
@@ -38,7 +40,7 @@ class ktApiController extends Controller
         $returnData = $curlController->postCURL($uri,$body,$header);
         
         $returnData = json_decode($returnData['data'],true);
-
+	Log::info($returnData);
         if($returnData['returndescription'] == "Success") {
             $authToken = $returnData['response']['auth_token'];
             return $authToken;

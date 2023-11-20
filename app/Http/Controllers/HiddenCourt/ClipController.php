@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ClipController extends Controller
 {
@@ -27,7 +28,8 @@ class ClipController extends Controller
     {
 
         $cartController = new CartController();
-        $todayCartList = $cartController->getTodayReservation();
+	$todayCartList = $cartController->getTodayReservation();
+	Log::info($todayCartList);
         $ktApiController = new ktApiController();
         $authToken = $ktApiController->getAuthToken();
         return $authToken;
