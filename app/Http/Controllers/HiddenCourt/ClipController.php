@@ -12,6 +12,7 @@ use App\Models\HiddenCourt\DevClip;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -25,13 +26,15 @@ class ClipController extends Controller
 
     public function setClipToday()
     {
-
+        Log::info('INIT SET CLIP TODAY');
         $cartController = new CartController();
         $todayCartList = $cartController->getTodayReservation();
         $ktApiController = new ktApiController();
         $authToken = $ktApiController->getAuthToken();
-        return $authToken;
+        Log::info('SET CLIP AUTH TOKEN CHECK ==>');
+        Log::info($authToken);
         if ($authToken) {
+            Log::info('INIT SET CLIP CHECK AUTH');
             foreach ($todayCartList as $todayCart) {
                 $coatName = str_replace(' ', '', $todayCart['coatname']);
                 $cameraInfo = Camera::select('*')->where('cam_name', $coatName)->first();
@@ -60,7 +63,8 @@ class ClipController extends Controller
         $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
         $endTime = date("YmdHis", $startTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
-        
+        Log::info('SAVE NEW CLIP ==>');
+        Log::info($videoInfo);
         // 영상 정보가 있을 경우
         if (isset($videoInfo['response']['stream_url'])) {
 

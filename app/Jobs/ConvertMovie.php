@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use App\Models\HiddenCourt\DevClip;
+use Illuminate\Support\Facades\Log;
 
 class ConvertMovie implements ShouldQueue
 {
@@ -41,6 +42,8 @@ class ConvertMovie implements ShouldQueue
         $fileName = uniqid().'.mp4';
         $filePath = "common/video/".$this->cartInfo['phoneid'].'/'.$fileName;
         $ffmpegCommand = 'C:\ffmpeg\bin\ffmpeg -i '.env('AWS_CLOUDFRONT_S3_URL').'/'.$this->originPath.' -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 '.$fileName;
+        Log::info('INIT CHECK FFMPEG CART INFO ==> ');
+        Log::info($this->cartInfo);
         shell_exec($ffmpegCommand);
 
         if(file_exists($fileName)) {
