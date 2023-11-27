@@ -18,10 +18,9 @@ class Kernel extends ConsoleKernel
             Log::info('== RUNNING SCHEDULE SET CLIP ==');
             $clipController = new ClipController();
             $clipController->setClipToday();
-        })
-        // ->hourlyAt(10);
-        ->everyMinute();
-        $schedule->command('queue:work --daemon --queue=high,default')->everyMinute()->withoutOverlapping();
+        })->hourlyAt(10);
+        // ->everyMinute();
+        $schedule->command('queue:work --daemon --queue=high,default --timeout=1000000')->everyMinute()->withoutOverlapping();
     }
 
     /**
