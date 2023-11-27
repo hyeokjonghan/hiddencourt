@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class ClipController extends Controller
 {
@@ -29,8 +28,8 @@ class ClipController extends Controller
     {
         Log::info('INIT SET CLIP TODAY');
         $cartController = new CartController();
-	$todayCartList = $cartController->getTodayReservation();
-	Log::info($todayCartList);
+	    $todayCartList = $cartController->getTodayReservation();
+	    Log::info($todayCartList);
         $ktApiController = new ktApiController();
         $authToken = $ktApiController->getAuthToken();
         Log::info('SET CLIP AUTH TOKEN CHECK ==>');
