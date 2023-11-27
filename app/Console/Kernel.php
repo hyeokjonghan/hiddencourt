@@ -6,6 +6,10 @@ use App\Http\Controllers\HiddenCourt\ClipController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
+<<<<<<< HEAD
+=======
+
+>>>>>>> b346131cc009457318e97d0c6002c340c23a7ee0
 class Kernel extends ConsoleKernel
 {
     /**
@@ -15,11 +19,12 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function() {
+            Log::info('== RUNNING SCHEDULE SET CLIP ==');
             $clipController = new ClipController();
-	    $token = $clipController->setClipToday();
-	    Log::info($token);
-        })->everyMinute();
-
+            $clipController->setClipToday();
+        })
+        // ->hourlyAt(10);
+        ->everyMinute();
         $schedule->command('queue:work --daemon --queue=high,default')->everyMinute()->withoutOverlapping();
     }
 
