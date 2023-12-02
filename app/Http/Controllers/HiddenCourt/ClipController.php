@@ -9,6 +9,8 @@ use App\Jobs\ConvertMovie;
 use App\Models\Camera;
 use App\Models\HiddenCourt\DevCart;
 use App\Models\HiddenCourt\DevClip;
+use DateInterval;
+use DateTime;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -57,10 +59,25 @@ class ClipController extends Controller
         }
     }
 
+    function addMinutesToTime($timeString, $minutesToAdd) {
+        $dateTime = DateTime::createFromFormat('H:i', $timeString);
+        
+        if (!$dateTime) {
+            // 처리할 수 없는 형식의 시간이라면 예외 처리
+            return $timeString;
+        }
+    
+        // 분을 더하고 수정된 DateTime 객체를 반환
+        $dateTime->add(new DateInterval('PT' . $minutesToAdd . 'M'));
+    
+        // 수정된 시간을 반환
+        return $dateTime->format('H:i');
+    }
+
     public function saveNewClip($authToken, $cartInfo, $time, $cartTime, $cameraInfo)
     {
         $ktApiController = new ktApiController();
-        $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $time) . '00';
+        $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $this->addMinutesToTime($time,5)) . '00';
         $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
         $endTime = date("YmdHis", $startTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);

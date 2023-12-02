@@ -49,7 +49,8 @@ class ConvertMovie implements ShouldQueue
         shell_exec($ffmpegCommand);
 
         if(file_exists($fileName)) {
-            Storage::disk('s3')->put($filePath, file_get_contents($fileName));
+            $fileStorageLog = Storage::disk('s3')->put($filePath, file_get_contents($fileName));
+            Log::info($fileStorageLog);
             $clip = new DevClip([
                 'cart_idx' => $this->cartInfo['idx'],
                 'phoneid' => $this->cartInfo['phoneid'],
