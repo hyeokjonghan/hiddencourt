@@ -39,8 +39,12 @@ class ClipController extends Controller
         if ($authToken) {
             Log::info('INIT SET CLIP CHECK AUTH');
             foreach ($todayCartList as $todayCart) {
+                Log::info('TODAY CART ==>');
+                Log::info($todayCart);
                 $coatName = str_replace(' ', '', $todayCart['coatname']);
                 $cameraInfo = Camera::select('*')->where('cam_name', $coatName)->first();
+                Log::info('CAMERA INFO ==>');
+                Log::info($cameraInfo);
 
                 if ($todayCart['first_time']) {
                     $checkQuery = DevClip::select('*')->where('cart_time', 1)->where('cart_idx', $todayCart['idx'])->get();

@@ -22,7 +22,6 @@ class ktApiController extends Controller
             'Content-Type:application/json;charset=UTF-8',
             'Authorization:Basic '.base64_encode(env('GIGA_ID').':'.env('GIGA_PASS'))
 	];
-	Log::info($header);
 
         $body = [
             'request'=>[
@@ -32,7 +31,6 @@ class ktApiController extends Controller
                 'site_id'=>env('GIGA_SITEID')
             ]
 	];
-	Log::info($body);
 
         $body = json_encode($body,true);
         
@@ -40,7 +38,6 @@ class ktApiController extends Controller
         $returnData = $curlController->postCURL($uri,$body,$header);
         
         $returnData = json_decode($returnData['data'],true);
-	Log::info($returnData);
         if($returnData['returndescription'] == "Success") {
             $authToken = $returnData['response']['auth_token'];
             return $authToken;
