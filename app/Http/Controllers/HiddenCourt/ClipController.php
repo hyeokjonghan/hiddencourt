@@ -77,9 +77,11 @@ class ClipController extends Controller
     public function saveNewClip($authToken, $cartInfo, $time, $cartTime, $cameraInfo)
     {
         $ktApiController = new ktApiController();
-        $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $this->addMinutesToTime($time,5)) . '00';
-        $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
-        $endTime = date("YmdHis", $startTimeStamp);
+        // $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $this->addMinutesToTime($time,5)) . '00';
+        $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+5 minutes");
+        $startTime = date("YmdHis", $startTimeStamp);
+        $endTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
+        $endTime = date("YmdHis", $endTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
         Log::info('SAVE NEW CLIP ==>');
         Log::info($videoInfo);

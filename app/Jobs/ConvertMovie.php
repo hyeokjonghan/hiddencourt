@@ -50,6 +50,7 @@ class ConvertMovie implements ShouldQueue
 
         if(file_exists($fileName)) {
             $fileStorageLog = Storage::disk('s3')->put($filePath, file_get_contents($fileName));
+            Log::info('S3 UPLOAD RESULT ==>');
             Log::info($fileStorageLog);
             $clip = new DevClip([
                 'cart_idx' => $this->cartInfo['idx'],
