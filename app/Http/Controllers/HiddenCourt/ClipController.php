@@ -83,11 +83,11 @@ class ClipController extends Controller
         $endTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
         $endTime = date("YmdHis", $endTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
-        Log::info('SAVE NEW CLIP ==>');
+        Log::info('SAVE NEW CLIP START ==>');
         Log::info($videoInfo);
         // 영상 정보가 있을 경우
         if (isset($videoInfo['response']['stream_url'])) {
-
+            Log::info('IS SET STREAM');
             $context = array(
                 "ssl" => array(
                     "verify_peer" => false,
