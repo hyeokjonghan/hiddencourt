@@ -104,6 +104,12 @@ class ClipController extends Controller
             $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
             Storage::disk('s3')->put($filePath, $html);
 
+            // 큐 등록시 is convert ready 1로 세팅
+            DevCart::where('idx', $cartInfo['idx'])
+            ->update([
+                'is_convert_ready'=>true
+            ]);
+
             // 해당 부분 부터 큐로 처리
             Queue::push(new ConvertMovie($filePath, $cartInfo, $cartTime));
 

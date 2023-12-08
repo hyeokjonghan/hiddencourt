@@ -13,4 +13,8 @@ class DevCart extends Model
     protected $table = "dev_cart";
 
     protected $primaryKey = "idx";
+
+    protected $fillable = [
+        'is_convert_ready'
+    ];
 }
