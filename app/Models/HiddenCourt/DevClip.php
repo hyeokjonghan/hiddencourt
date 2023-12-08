@@ -19,6 +19,8 @@ class DevClip extends Model
         'cart_time',
         'link',
         'regdate',
-        'limitdate'
+        'limitdate',
+        'is_uploaded',
+        'file_path'
     ];
 }

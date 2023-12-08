@@ -47,14 +47,17 @@ class ClipController extends Controller
                 Log::info($cameraInfo);
 
                 if ($todayCart['first_time']) {
-                    $checkQuery = DevClip::select('*')->where('cart_time', 1)->where('cart_idx', $todayCart['idx'])->get();
+                    $checkQuery = DevClip::select('*')->where('cart_time', 1)
+                    ->where('cart_idx', $todayCart['idx'])
+                    ->where('is_uploaded', false)
+                    ->get();
                     if (count($checkQuery) == 0) {
                         $this->saveNewClip($authToken, $todayCart, $todayCart['first_time'], 1, $cameraInfo);
                     }
                 }
 
                 if ($todayCart['second_time']) {
-                    $checkQuery = DevClip::select('*')->where('cart_time', 2)->where('cart_idx', $todayCart['idx'])->get();
+                    $checkQuery = DevClip::select('*')->where('cart_time', 2)->where('cart_idx', $todayCart['idx'])->where('is_uploaded', false)->get();
                     if (count($checkQuery) == 0) {
                         $this->saveNewClip($authToken, $todayCart, $todayCart['second_time'], 2, $cameraInfo);
                     }
