@@ -41,7 +41,7 @@ class Kernel extends ConsoleKernel
             
         })->everyFiveMinutes();
         // ->everyMinute();
-        $schedule->command('queue:work --daemon --queue=high,default --timeout=1000000')->everyMinute()->withoutOverlapping();
+        // $schedule->command('queue:work --daemon --queue=high,default --timeout=1000000')->everyMinute()->withoutOverlapping();
     }
 
     /**
