@@ -39,9 +39,16 @@ class Kernel extends ConsoleKernel
                 }
             }
             
-        })->everyFiveMinutes();
+        })->hourlyAt(50);
         // ->everyMinute();
         // $schedule->command('queue:work --daemon --queue=high,default --timeout=1000000')->everyMinute()->withoutOverlapping();
+
+        // screen -S laravel_queue
+        // queue:work --daemon --queue=high,default --timeout=1000000
+        // Crtl+a after d
+        // screen -r laravel_queue
+
+        // 다음에 정상작동 확인 안되면 supervisor로 추가 구성 후 처리
     }
 
     /**
