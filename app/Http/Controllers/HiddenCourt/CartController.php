@@ -20,6 +20,7 @@ class CartController extends Controller
             $q->where('is_convert_ready', false)
             ->orWhereNull('is_convert_ready');
         })
+        ->where('od_use_machine', '<>', 'Y')
         ->take(6)
         ->get();
     }
