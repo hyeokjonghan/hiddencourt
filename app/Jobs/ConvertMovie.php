@@ -55,16 +55,7 @@ class ConvertMovie implements ShouldQueue
         Log::info($ffmpegCommand == null);
         // shell_exec 의 결과값을 받아와야 함
 
-        if($ffmpegResult == null) {
-            // TODO :: 원본 영상 업로드 된 것 S3 상에서 확인하고, 영상 정보 삭제 하는 스케줄 만들고 아래 내용 처리 해줘야 함
-            // 영상 변환 실패시, 큐에 등록된 것 취소 (재등록 시켜야 함)
-            DevCart::where('idx', $this->cartInfo['idx'])
-            ->update([
-                'is_convert_ready'=>false
-            ]);
-            Log::info('영상 변환 실패');
-            unlink($fileName);
-        } else {
+        if(file_exists($fileName)) {
             // 로직 자체를 ffmpeg가 반환 성공 이후에 처리되도록 함
             $fileStorageLog = Storage::disk('s3')->put($filePath, file_get_contents($fileName));
             Log::info('S3 UPLOAD RESULT ==>');
@@ -80,6 +71,16 @@ class ConvertMovie implements ShouldQueue
                 'limitdate' => date("Y-m-d", strtotime(date("Y-m-d") . "+7 days"))
             ]);
             $clip->save();
+
+        } else {
+            // TODO :: 원본 영상 업로드 된 것 S3 상에서 확인하고, 영상 정보 삭제 하는 스케줄 만들고 아래 내용 처리 해줘야 함
+            // 영상 변환 실패시, 큐에 등록된 것 취소 (재등록 시켜야 함)
+            DevCart::where('idx', $this->cartInfo['idx'])
+            ->update([
+                'is_convert_ready'=>false
+            ]);
+            Log::info('영상 변환 실패');
+            unlink($fileName);
         }
 
     }
