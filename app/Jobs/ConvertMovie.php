@@ -51,9 +51,11 @@ class ConvertMovie implements ShouldQueue
         Log::info($this->cartInfo);
         $ffmpegResult = shell_exec($ffmpegCommand);
         Log::info($ffmpegCommand);
+        Log::info($ffmpegCommand === null);
+        Log::info($ffmpegCommand == null);
         // shell_exec 의 결과값을 받아와야 함
 
-        if($ffmpegResult === null) {
+        if($ffmpegResult == null) {
             // TODO :: 원본 영상 업로드 된 것 S3 상에서 확인하고, 영상 정보 삭제 하는 스케줄 만들고 아래 내용 처리 해줘야 함
             // 영상 변환 실패시, 큐에 등록된 것 취소 (재등록 시켜야 함)
             DevCart::where('idx', $this->cartInfo['idx'])
