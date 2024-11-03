@@ -64,16 +64,17 @@ class ClipController extends Controller
                 ),
             );
             if($cartInfo['streaming_link'] != '') return $cartInfo['streaming_link'];
-            $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
-            $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
-            Storage::disk('s3')->put($filePath, $html);
+            // $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
+            // $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
+            // Storage::disk('s3')->put($filePath, $html);
 
             // 큐 등록시 is convert ready 1로 세팅
             DevCart::where('idx', $cartInfo['idx'])
                 ->update([
-                    'streaming_link'=>env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath
+                    'streaming_link'=>$videoInfo['response']['stream_url']
                 ]);
-            return env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath;
+            return $videoInfo['response']['stream_url'];
+            // return env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath;
         }
     }
 
