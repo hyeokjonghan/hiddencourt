@@ -41,7 +41,7 @@ Route::prefix('cctv')->group(function() {
     // Route::get('/connect/test', [ClipController::class, 'setClipToday']);
     Route::get('/connect/test', [ktApiController::class, 'getAuthToken']);
     Route::post('/cart/sync',[ClipController::class, 'clipSync']);
-    Route::get('/cart/{cartId}/{cartTime}',[CCTVController::class, 'getCart']);
+    Route::get('/cart/{cartId}/{cartTime}',[ClipController::class, 'getCart']);
 });
 
 // 로그인 하고 사용 할 수 있는 API
