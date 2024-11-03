@@ -26,6 +26,68 @@ class ClipController extends Controller
         return DevClip::select('*')->get();
     }
 
+    public function getClip($cartId, $cartTime)
+    {
+        $ktApiController = new ktApiController();
+        $authToken = $ktApiController->getAuthToken();
+
+        $cartInfo = DevCart::select('*')
+            ->where('id', $cartId)
+            ->where('od_status','<>','취소')
+            ->first();
+        $coatName = str_replace(' ', '', $cartInfo['coatname']);
+        $cameraInfo = Camera::select('*')->where('cam_name', $coatName)->first();
+
+        if ($cartTime == 1) {
+            $checkQuery = DevClip::select('*')->where('cart_time', 1)
+                ->where('cart_idx', $cartInfo['idx'])
+                ->where('is_uploaded', false)
+                ->get();
+            if (count($checkQuery) == 0) {
+                $this->viewNewClip($authToken, $cartInfo, $cartInfo['first_time'], $cartTime, $cameraInfo);
+            }
+        }
+
+        $checkQuery = DevClip::select('*')->where('cart_time', 2)->where('cart_idx', $cartInfo['idx'])->where('is_uploaded', false)->get();
+        if (count($checkQuery) == 0) {
+            $this->viewNewClip($authToken, $cartInfo, $cartInfo['second_time'], $cartTime, $cameraInfo);
+        }
+    }
+
+    public function viewNewClip($authToken, $cartInfo, $time, $cartTime, $cameraInfo)
+    {
+        $ktApiController = new ktApiController();
+        // $startTime = str_replace('-','',$cartInfo['od_regdate']) . str_replace(':', '', $this->addMinutesToTime($time,5)) . '00';
+        $startTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+5 minutes");
+        $startTime = date("YmdHis", $startTimeStamp);
+        $endTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
+        $endTime = date("YmdHis", $endTimeStamp);
+        $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
+        Log::info('SAVE NEW CLIP START ==>');
+        Log::info($videoInfo);
+        // 영상 정보가 있을 경우
+        if (isset($videoInfo['response']['stream_url'])) {
+            Log::info('IS SET STREAM');
+            $context = array(
+                "ssl" => array(
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                ),
+            );
+            if($cartInfo['streaming_link'] != '') return $cartInfo['streaming_link'];
+            $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
+            $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
+            Storage::disk('s3')->put($filePath, $html);
+
+            // 큐 등록시 is convert ready 1로 세팅
+            DevCart::where('idx', $cartInfo['idx'])
+                ->update([
+                    'streaming_link'=>$filePath
+                ]);
+            return env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath;
+        }
+    }
+
     public function setClipToday()
     {
         Log::info('INIT SET CLIP TODAY');
@@ -68,15 +130,15 @@ class ClipController extends Controller
 
     function addMinutesToTime($timeString, $minutesToAdd) {
         $dateTime = DateTime::createFromFormat('H:i', $timeString);
-        
+
         if (!$dateTime) {
             // 처리할 수 없는 형식의 시간이라면 예외 처리
             return $timeString;
         }
-    
+
         // 분을 더하고 수정된 DateTime 객체를 반환
         $dateTime->add(new DateInterval('PT' . $minutesToAdd . 'M'));
-    
+
         // 수정된 시간을 반환
         return $dateTime->format('H:i');
     }
@@ -103,7 +165,6 @@ class ClipController extends Controller
             );
             $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
 
-            
             $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
             Storage::disk('s3')->put($filePath, $html);
 
@@ -121,7 +182,7 @@ class ClipController extends Controller
 
     public function clipSync(Request $request)
     {
-        
+
         $validator = [
             'idx' => 'required|integer',
             'phoneid' => 'required|string'
@@ -156,14 +217,14 @@ class ClipController extends Controller
                     $this->saveNewClip($authToken, $cartInfo, $cartInfo['first_time'], 1, $cameraInfo);
                 }
             }
-    
+
             if ($cartInfo['second_time']) {
                 $checkQuery = DevClip::select('*')->where('cart_time', 2)->where('cart_idx', $cartInfo['idx'])->get();
                 if (count($checkQuery) == 0) {
                     $this->saveNewClip($authToken, $cartInfo, $cartInfo['second_time'], 2, $cameraInfo);
                 }
             }
-            
+
         } catch(Error $e) {
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

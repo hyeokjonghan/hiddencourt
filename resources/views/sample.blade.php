@@ -18,7 +18,7 @@
         height="264"
         data-setup="{}"
       >
-      <source src="https://dnxhgyn7462gb.cloudfront.net/common/video/648c228065f56.m3u8" type="application/x-mpegURL">
+      <source src="https://dnxhgyn7462gb.cloudfront.net/common/video/01033996377/67257cdae5179.m3u8" type="application/x-mpegURL">
         <p class="vjs-no-js">
           To view this video please enable JavaScript, and consider upgrading to a
           web browser that
