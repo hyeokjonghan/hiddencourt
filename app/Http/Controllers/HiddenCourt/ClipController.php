@@ -38,20 +38,9 @@ class ClipController extends Controller
         $coatName = str_replace(' ', '', $cartInfo['coatname']);
         $cameraInfo = Camera::select('*')->where('cam_name', $coatName)->first();
 
-        if ($cartTime == 1) {
-            $checkQuery = DevClip::select('*')->where('cart_time', 1)
-                ->where('cart_idx', $cartInfo['idx'])
-                ->where('is_uploaded', false)
-                ->get();
-            if (count($checkQuery) == 0) {
-                $this->viewNewClip($authToken, $cartInfo, $cartInfo['first_time'], $cartTime, $cameraInfo);
-            }
-        }
+        if ($cartTime == 1) { return $this->viewNewClip($authToken, $cartInfo, $cartInfo['first_time'], $cartTime, $cameraInfo);}
 
-        $checkQuery = DevClip::select('*')->where('cart_time', 2)->where('cart_idx', $cartInfo['idx'])->where('is_uploaded', false)->get();
-        if (count($checkQuery) == 0) {
-            $this->viewNewClip($authToken, $cartInfo, $cartInfo['second_time'], $cartTime, $cameraInfo);
-        }
+        return $this->viewNewClip($authToken, $cartInfo, $cartInfo['second_time'], $cartTime, $cameraInfo);
     }
 
     public function viewNewClip($authToken, $cartInfo, $time, $cartTime, $cameraInfo)
