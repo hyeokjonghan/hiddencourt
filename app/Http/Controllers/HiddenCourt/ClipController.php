@@ -71,7 +71,7 @@ class ClipController extends Controller
             // 큐 등록시 is convert ready 1로 세팅
             DevCart::where('idx', $cartInfo['idx'])
                 ->update([
-                    'streaming_link'=>$filePath
+                    'streaming_link'=>env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath
                 ]);
             return env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath;
         }
