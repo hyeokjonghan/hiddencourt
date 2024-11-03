@@ -52,30 +52,7 @@ class ClipController extends Controller
         $endTimeStamp = strtotime($cartInfo['od_regdate'] . " " . $time . ":00" . "+30 minutes");
         $endTime = date("YmdHis", $endTimeStamp);
         $videoInfo = $ktApiController->recordVideo($authToken, $cameraInfo['camera_id'], $startTime, $endTime);
-        Log::info('SAVE NEW CLIP START ==>');
-        Log::info($videoInfo);
-        // 영상 정보가 있을 경우
-        if (isset($videoInfo['response']['stream_url'])) {
-            Log::info('IS SET STREAM');
-            $context = array(
-                "ssl" => array(
-                    "verify_peer" => false,
-                    "verify_peer_name" => false,
-                ),
-            );
-            if($cartInfo['streaming_link'] != '') return $cartInfo['streaming_link'];
-            // $html = file_get_contents($videoInfo['response']['stream_url'], false, stream_context_create($context));
-            // $filePath = "common/video/".$cartInfo['phoneid'].'/'.uniqid().'.m3u8';
-            // Storage::disk('s3')->put($filePath, $html);
-
-            // 큐 등록시 is convert ready 1로 세팅
-            DevCart::where('idx', $cartInfo['idx'])
-                ->update([
-                    'streaming_link'=>$videoInfo['response']['stream_url']
-                ]);
-            return $videoInfo['response']['stream_url'];
-            // return env('AWS_CLOUDFRONT_S3_URL').'/'.$filePath;
-        }
+        return $videoInfo;
     }
 
     public function setClipToday()
