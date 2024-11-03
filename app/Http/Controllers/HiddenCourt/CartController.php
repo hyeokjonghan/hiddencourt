@@ -21,6 +21,7 @@ class CartController extends Controller
             ->orWhereNull('is_convert_ready');
         })
         ->where('od_use_machine', '<>', 'Y')
+        ->orderBy('od_regdate','asc')
         ->take(6)
         ->get();
     }
