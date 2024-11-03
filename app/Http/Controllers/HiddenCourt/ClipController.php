@@ -32,7 +32,7 @@ class ClipController extends Controller
         $authToken = $ktApiController->getAuthToken();
 
         $cartInfo = DevCart::select('*')
-            ->where('id', $cartId)
+            ->where('idx', $cartId)
             ->where('od_status','<>','취소')
             ->first();
         $coatName = str_replace(' ', '', $cartInfo['coatname']);
