@@ -10,10 +10,12 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     public function getTodayReservation() {
-        // $date = date("Y-m-d");
         $startTimeStamp = strtotime(date("Y-m-d") . "-7 days");
         $date = date("Y-m-d",$startTimeStamp);
+        $hour = (int) date("H");
+        $hour = sprintf('%02d', ($hour - 1 + 24) % 24);
         return DevCart::select('*')->where('od_regdate', '>=', $date)
+        ->where('first_time','<=', $hour.':00')
         ->where('od_status','<>','취소')
         ->where(function($q) {
             // 영상 정보 큐에 등록 되었는지 확인
